@@ -6,4 +6,4 @@ To get check Estonia companies tax debt from EMTA and get results in JSON
 * npm install
 * npm start
 * open browser http://localhost:3000/tax/:regCode
-* rplace :regCode with interested company registration code
+* replace :regCode with interested company registration code
