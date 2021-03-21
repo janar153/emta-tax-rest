@@ -39,7 +39,7 @@ const parseMTAResponse = function(code: string, data: any) {
                 tmp = null;
                 if ((tmp = companyNameRegex.exec(line)) !== null) {
                     if(tmp.groups !== undefined) {
-                        response.reg_code = (tmp["groups"].reg_code1 !== undefined && tmp["groups"].reg_code1 !== null) ? tmp["groups"].reg_code1 : tmp["groups"].reg_code2;
+                        response.reg_code = (tmp["groups"].reg_code1 !== undefined && tmp["groups"].reg_code1 !== null) ? parseInt(tmp["groups"].reg_code1) : parseInt(tmp["groups"].reg_code2);
                         response.company_name = (tmp["groups"].company_name1 !== undefined && tmp["groups"].company_name1 !== null) ? tmp["groups"].company_name1.trim() : tmp["groups"].company_name2.trim();
                     }
                 }
@@ -108,7 +108,6 @@ const parseMTAResponse = function(code: string, data: any) {
                 }
             }
 
-                       
         }
     }
 
@@ -116,7 +115,6 @@ const parseMTAResponse = function(code: string, data: any) {
     let details: { [x: string]: any; }[] = [];
     let missing_declarations: { [x: string]: any; }[] = [];
     let tables = $('table', data);
-    let i = 0;
     for (let tblID = 0; tblID < tables.length; tblID++) {
         let table = tables[tblID];
         let parsedTable = $(table).parsetable(true, true, true);
@@ -142,8 +140,6 @@ const parseMTAResponse = function(code: string, data: any) {
             }
             
         }
-
-        i++;
     }
 
     const fixNumber = function(str: string) {
@@ -164,9 +160,9 @@ const parseMTAResponse = function(code: string, data: any) {
 
                 debt_details.push({ 
                     debt_type: details[index][0].debt_type, 
-                    amount: fixNumber(details[index][1].amount).toFixed(2),
-                    in_schedule: fixNumber(details[index][2].in_schedule).toFixed(2), 
-                    in_dispute: fixNumber(details[index][3].in_dispute).toFixed(2)
+                    amount: parseFloat(fixNumber(details[index][1].amount).toFixed(2)),
+                    in_schedule: parseFloat(fixNumber(details[index][2].in_schedule).toFixed(2)), 
+                    in_dispute: parseFloat(fixNumber(details[index][3].in_dispute).toFixed(2))
                 });
             }            
         }
@@ -189,9 +185,9 @@ const parseMTAResponse = function(code: string, data: any) {
 
     response.tax_debt_details = (debt_details.length > 0) ? debt_details : undefined;
 
-    if(_total_tax_debt > 0) {               response.total_tax_debt = _total_tax_debt.toFixed(2); }
-    if(_total_tax_debt_in_schedule > 0) {   response.total_tax_debt_in_schedule = _total_tax_debt_in_schedule.toFixed(2); }
-    if(_total_tax_debt_in_dispute > 0) {    response.total_tax_debt_in_dispute = _total_tax_debt_in_dispute.toFixed(2); }
+    if(_total_tax_debt > 0) {               response.total_tax_debt = parseFloat(_total_tax_debt.toFixed(2)); }
+    if(_total_tax_debt_in_schedule > 0) {   response.total_tax_debt_in_schedule =parseFloat(_total_tax_debt_in_schedule.toFixed(2)); }
+    if(_total_tax_debt_in_dispute > 0) {    response.total_tax_debt_in_dispute = parseFloat(_total_tax_debt_in_dispute.toFixed(2)); }
 
     return response;
 };
